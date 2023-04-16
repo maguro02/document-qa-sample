@@ -6,7 +6,7 @@ const readVectorStore: NextApiHandler = async (req, res) => {
 
   const vectorStores = await readdirSync('public/vectorStore');
 
-  console.log(vectorStores);
+  res.status(200).json(vectorStores);
 };
 
 export default readVectorStore;

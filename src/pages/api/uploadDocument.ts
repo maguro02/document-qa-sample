@@ -30,7 +30,7 @@ const uploadDocument: NextApiHandler = async (req, res) => {
     new OpenAIEmbeddings({ openAIApiKey: process.env.OPENAI_API_KEY }),
   );
 
-  await vectorStore.save(`${process.cwd()}/public/vectorStore/${file.originalFilename}`);
+  await vectorStore.save(`${process.cwd()}/public/vectorStore/${file.newFilename}`);
 
   res.status(200).send('dcoument uploaded.');
 };

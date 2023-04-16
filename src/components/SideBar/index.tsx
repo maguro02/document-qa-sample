@@ -1,16 +1,28 @@
 'use client';
 import styled from '@emotion/styled';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useVectorStore } from 'hooks/useVectorStore';
 
 type ComponentProps = {
   className?: string;
+  isRoute: boolean;
+  docs: string[];
 };
 
-const Component: React.FC<ComponentProps> = ({ className }) => (
+const Component: React.FC<ComponentProps> = ({ className, isRoute, docs }) => (
   <div className={className}>
-    <span className="item">test1</span>
-    <span className="item">test2</span>
-    <span className="item">test3</span>
+    {!isRoute && (
+      <Link className="item" href="/">
+        Back to Home
+      </Link>
+    )}
+    {docs.length > 0 &&
+      docs.map((doc) => (
+        <Link key={doc} className="item" href={`conversation/${doc}`}>
+          {doc}
+        </Link>
+      ))}
   </div>
 );
 
@@ -25,6 +37,7 @@ const StyledComponent = styled(Component)`
     padding: 10px;
     border-bottom: 1px solid #676767;
     transition: background-color 0.3s;
+    text-decoration: none;
     cursor: pointer;
 
     :hover {
@@ -34,9 +47,10 @@ const StyledComponent = styled(Component)`
 `;
 
 export const SideBar: React.FC = () => {
-  const stores = (async () => await fetch('/api/readVectorStore').then((res) => res.json()))(); //useVectorStore();
+  const [stores, reFetch] = useVectorStore();
+  const pathName = usePathname();
 
-  console.log(stores);
+  const isRoutePath = pathName === '/';
 
-  return <StyledComponent />;
+  return <StyledComponent docs={stores} isRoute={isRoutePath} />;
 };

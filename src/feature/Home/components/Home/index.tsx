@@ -28,7 +28,6 @@ const StyledComponent = styled(Component)`
   height: 100%;
   justify-content: center;
   align-items: center;
-  background-color: rgb(52, 53, 65);
 
   .container {
     display: flex;
