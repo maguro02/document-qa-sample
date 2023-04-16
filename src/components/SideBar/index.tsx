@@ -1,5 +1,6 @@
 'use client';
 import styled from '@emotion/styled';
+import { useVectorStore } from 'hooks/useVectorStore';
 
 type ComponentProps = {
   className?: string;
@@ -33,5 +34,9 @@ const StyledComponent = styled(Component)`
 `;
 
 export const SideBar: React.FC = () => {
+  const stores = (async () => await fetch('/api/readVectorStore').then((res) => res.json()))(); //useVectorStore();
+
+  console.log(stores);
+
   return <StyledComponent />;
 };
