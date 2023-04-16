@@ -1,15 +1,23 @@
 'use client';
 import styled from '@emotion/styled';
+import { FileDialogInput } from 'components/ui/input/HiddenFileInput';
+import { useRef } from 'react';
 
 type ComponentProps = {
   className?: string;
+  inputRef: React.RefObject<HTMLInputElement>;
+  onUploadButtonClick: () => void;
+  onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const Component: React.FC<ComponentProps> = ({ className }) => (
+const Component: React.FC<ComponentProps> = ({ className, inputRef, onUploadButtonClick, onInputChange }) => (
   <div className={className}>
     <div className="container">
       <h2 className="title">Document QA</h2>
-      <div className="upload">ドキュメントをアップロード</div>
+      <button className="upload" onClick={onUploadButtonClick}>
+        ドキュメントをアップロード
+      </button>
+      <FileDialogInput ref={inputRef} accept="pdf" onChange={onInputChange} />
     </div>
   </div>
 );
@@ -49,5 +57,35 @@ const StyledComponent = styled(Component)`
 `;
 
 export const Home: React.FC = () => {
-  return <StyledComponent />;
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleUpload = () => {
+    inputRef.current?.click();
+  };
+
+  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formData = new FormData();
+
+    const files = e.target.files;
+
+    if (files) {
+      formData.append('file', files[0]);
+
+      const uploadResponse = await fetch('/api/uploadDocument', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!uploadResponse.ok) {
+        console.error(uploadResponse);
+        return;
+      }
+
+      const uploadResponseJson = await uploadResponse.text();
+
+      console.log(uploadResponseJson);
+    }
+  };
+
+  return <StyledComponent inputRef={inputRef} onUploadButtonClick={handleUpload} onInputChange={handleInputChange} />;
 };
