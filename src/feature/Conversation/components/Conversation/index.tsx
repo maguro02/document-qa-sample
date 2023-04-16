@@ -75,7 +75,6 @@ const StyledComponent = styled(Component)`
       display: flex;
       flex-flow: column;
       width: 100%;
-      height: 100%;
       padding: 12px;
       border-radius: 5px;
       background-color: rgb(32, 33, 35, 0.6);

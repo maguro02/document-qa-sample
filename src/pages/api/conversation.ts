@@ -69,18 +69,17 @@ const conversation: NextApiHandler = async (req, res) => {
     new OpenAIEmbeddings({ openAIApiKey: process.env.OPENAI_API_KEY }),
   );
 
-  const chain = VectorDBQAChain.fromLLM(model, vectorStore, { returnSourceDocuments: true, k: 1 });
+  const chain = VectorDBQAChain.fromLLM(model, vectorStore, { returnSourceDocuments: true, k: 3 });
 
-  // const chain = ChatVectorDBQAChain.fromLLM(model, vectorStore, {
-  //   questionGeneratorTemplate: questionGenChain,
-  //   qaTemplate: 'ドキュメントの内容を参考にしつつ質問に答えてください。 {context} 質問: {question}',
-  //   returnSourceDocuments: true,
-  //   k: 2,
-  // });
+  const _chain = ChatVectorDBQAChain.fromLLM(model, vectorStore, {
+    qaTemplate: 'ドキュメントの内容を参考にしつつ質問に答えてください。 {context} 質問: {input}',
+    returnSourceDocuments: true,
+    k: 2,
+  });
 
   const qaTool = new ChainTool({
-    name: 'アニメーション分野におけるデジタル制作環境整備に係る調査研究報告書',
-    description: 'アニメーション制作におけるデジタル制作環境整備の調査報告書です。',
+    name: 'Shotgun関連MTG資料',
+    description: '社内でShotgunを使って効率化をするためのMTGの資料',
     chain,
   });
 
@@ -108,9 +107,9 @@ const conversation: NextApiHandler = async (req, res) => {
     allowedTools: tools.map((tool) => tool.name),
   });
 
-  const executor = AgentExecutor.fromAgentAndTools({ agent, tools });
+  // const executor = AgentExecutor.fromAgentAndTools({ agent, tools });
 
-  // const executor = await initializeAgentExecutor(tools, model, 'zero-shot-react-description');
+  const executor = await initializeAgentExecutor(tools, model, 'zero-shot-react-description');
 
   try {
     const result = await chain.call({ query });
