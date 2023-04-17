@@ -19,7 +19,8 @@ const uploadDocument: NextApiHandler = async (req, res) => {
 
   const file = files.file as formidable.File;
 
-  const loader = new PDFLoader(file.filepath, { pdfjs: () => import('pdfjs-dist/legacy/build/pdf') });
+  //@ts-ignore
+  const loader = new PDFLoader(file.filepath, { pdfjs: () => import('pdf-parse/lib/pdf.js/v1.10.100/build/pdf') });
 
   const docs = await loader.load();
 
