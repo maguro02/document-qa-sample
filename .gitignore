@@ -31,6 +31,9 @@ yarn-error.log*
 # vectorstores
 /public/vectorStore
 
+# notionExports
+/public/notion
+
 # vercel
 .vercel
 

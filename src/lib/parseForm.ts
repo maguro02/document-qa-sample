@@ -1,7 +1,7 @@
 import type { NextApiRequest } from 'next';
 import formidable from 'formidable';
 import mime from 'mime';
-import { existsSync, mkdirSync, statSync } from 'fs';
+import { mkdirSync, statSync } from 'fs';
 import { join } from 'path';
 
 export const FormidableError = formidable.errors.FormidableError;

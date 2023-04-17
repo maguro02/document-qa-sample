@@ -69,7 +69,7 @@ const conversation: NextApiHandler = async (req, res) => {
     new OpenAIEmbeddings({ openAIApiKey: process.env.OPENAI_API_KEY }),
   );
 
-  const chain = VectorDBQAChain.fromLLM(model, vectorStore, { returnSourceDocuments: true, k: 3 });
+  const chain = VectorDBQAChain.fromLLM(model, vectorStore, { returnSourceDocuments: true, k: 2 });
 
   const _chain = ChatVectorDBQAChain.fromLLM(model, vectorStore, {
     qaTemplate: 'ドキュメントの内容を参考にしつつ質問に答えてください。 {context} 質問: {input}',
@@ -78,8 +78,8 @@ const conversation: NextApiHandler = async (req, res) => {
   });
 
   const qaTool = new ChainTool({
-    name: 'Shotgun関連MTG資料',
-    description: '社内でShotgunを使って効率化をするためのMTGの資料',
+    name: `${vectorStoreName}のベクトルデータベース`,
+    description: '質問に答えるためにこのツールを使用できます。',
     chain,
   });
 
