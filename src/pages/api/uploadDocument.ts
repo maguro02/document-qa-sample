@@ -53,14 +53,7 @@ const uploadDocument: NextApiHandler = async (req, res) => {
     }
   })();
 
-  // //@ts-ignore
-  // const loader = new PDFLoader(file.filepath, { pdfjs: () => import('pdf-parse/lib/pdf.js/v1.10.100/build/pdf') });
-
-  // const docs = await loader.load();
-
   unlinkSync(file.filepath); //不要になったファイルを削除
-
-  // console.log(docs);
 
   const splitter = new CharacterTextSplitter({ chunkSize: 1000, chunkOverlap: 0 });
 
@@ -71,7 +64,7 @@ const uploadDocument: NextApiHandler = async (req, res) => {
     new OpenAIEmbeddings({ openAIApiKey: process.env.OPENAI_API_KEY }),
   );
 
-  await vectorStore.save(`${process.cwd()}/public/vectorStore/${file.originalFilename}`);
+  await vectorStore.save(`${process.cwd()}/public/vectorStore/${file.originalFilename?.replace(`.${fileExt}`, '')}`);
 
   res.status(200).send('dcoument uploaded.');
 };
